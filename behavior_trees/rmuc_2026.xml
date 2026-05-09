@@ -474,9 +474,9 @@
       <input_port name="friendly_supply_zone_non_exchange" default="true" type="bool">Use friendly supply zone non-exchange flag</input_port>
       <input_port name="ammo_threshold" default="50" type="int">Only exchange when projectile allowance is lower than this value</input_port>
       <input_port name="min_gold" default="150" type="int">Minimum remaining gold coin required before exchange</input_port>
-      <input_port name="base_exchange" default="1" type="int">First exchange projectile amount</input_port>
-      <input_port name="increment_step" default="150" type="int">Increase exchange amount by this value every new supply-zone visit</input_port>
-      <input_port name="max_exchange" default="180" type="int">Maximum projectile exchange value clamp</input_port>
+      <input_port name="base_exchange" default="150" type="int">First exchange projectile amount</input_port>
+      <input_port name="increment_step" default="1" type="int">Increase exchange amount by this value every new supply-zone visit</input_port>
+      <input_port name="max_exchange" default="500" type="int">Maximum projectile exchange value clamp</input_port>
       <input_port name="topic_name" default="sentry_cmd" type="std::string">Topic name of SentryCmd</input_port>
     </Action>
 
