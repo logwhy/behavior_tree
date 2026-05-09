@@ -141,30 +141,6 @@
                            topic_name="goal_pose"/>
             </Sequence>
 
-            <!-- 6. 3 秒内扣血大于 40：高速小陀螺 10 秒，不切姿态 -->
-            <Sequence>
-              <IsHpDecreased window_s="3.0"
-                             drop_threshold="40"
-                             hold_s="10.0"
-                             key_port="{@referee_robotStatus}"/>
-
-              <PublishSpinSpeed spin_speed="14.0"
-                                duration="0.0"
-                                topic_name="cmd_spin"/>
-
-              <PubNav2Goal goal="3.65;-3.5;0"
-                           map_command="{@map_command}"
-                           map_command_team="red"
-                           map_command_red_origin_x="2.7"
-                           map_command_red_origin_y="9.9"
-                           map_command_blue_origin_x="26.0"
-                           map_command_blue_origin_y="6.0"
-                           map_command_offset_x="0.0"
-                           map_command_offset_y="0.0"
-                           map_command_yaw="0.0"
-                           topic_name="goal_pose"/>
-            </Sequence>
-
             <!-- 7. 当前看到敌人：只切进攻姿态 + 高速小陀螺，不负责发导航点 -->
             <Sequence>
               <IsAttackState mode="enemy_visible"
@@ -267,6 +243,29 @@
                            frame_id="odom"
                            topic_name="goal_pose"/>
             </Sequence> -->
+            <!-- 6. 3 秒内扣血大于 40：高速小陀螺 10 秒，不切姿态 -->
+            <Sequence>
+              <IsHpDecreased window_s="3.0"
+                             drop_threshold="40"
+                             hold_s="10.0"
+                             key_port="{@referee_robotStatus}"/>
+
+              <PublishSpinSpeed spin_speed="14.0"
+                                duration="0.0"
+                                topic_name="cmd_spin"/>
+
+              <PubNav2Goal goal="3.65;-3.5;0"
+                           map_command="{@map_command}"
+                           map_command_team="red"
+                           map_command_red_origin_x="2.7"
+                           map_command_red_origin_y="9.9"
+                           map_command_blue_origin_x="26.0"
+                           map_command_blue_origin_y="6.0"
+                           map_command_offset_x="0.0"
+                           map_command_offset_y="0.0"
+                           map_command_yaw="0.0"
+                           topic_name="goal_pose"/>
+            </Sequence>
 
             <!-- 9. 1 分钟没敌人 + 进攻超过 3 分钟 + HP 大于 200：切防御姿态 -->
             <Sequence>
@@ -475,9 +474,9 @@
       <input_port name="friendly_supply_zone_non_exchange" default="true" type="bool">Use friendly supply zone non-exchange flag</input_port>
       <input_port name="ammo_threshold" default="50" type="int">Only exchange when projectile allowance is lower than this value</input_port>
       <input_port name="min_gold" default="150" type="int">Minimum remaining gold coin required before exchange</input_port>
-      <input_port name="base_exchange" default="150" type="int">First exchange projectile amount</input_port>
+      <input_port name="base_exchange" default="1" type="int">First exchange projectile amount</input_port>
       <input_port name="increment_step" default="150" type="int">Increase exchange amount by this value every new supply-zone visit</input_port>
-      <input_port name="max_exchange" default="500" type="int">Maximum projectile exchange value clamp</input_port>
+      <input_port name="max_exchange" default="180" type="int">Maximum projectile exchange value clamp</input_port>
       <input_port name="topic_name" default="sentry_cmd" type="std::string">Topic name of SentryCmd</input_port>
     </Action>
 

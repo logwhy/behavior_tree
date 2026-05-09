@@ -31,7 +31,9 @@ private:
 
   static std::mutex shared_mutex_;
   static bool received_once_;
+  static bool attack_finished_;
   static bool attack_started_;
+  static bool attack_finished_;
   static rclcpp::Time last_enemy_time_;
   static rclcpp::Time attack_start_time_;
 

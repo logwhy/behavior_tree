@@ -13,6 +13,7 @@ bool IsAttackStateCondition::received_once_ = false;
 bool IsAttackStateCondition::attack_started_ = false;
 rclcpp::Time IsAttackStateCondition::last_enemy_time_{0, 0, RCL_ROS_TIME};
 rclcpp::Time IsAttackStateCondition::attack_start_time_{0, 0, RCL_ROS_TIME};
+bool IsAttackStateCondition::attack_finished_ = false;
 
 IsAttackStateCondition::IsAttackStateCondition(
   const std::string & name,
@@ -84,7 +85,7 @@ bool IsAttackStateCondition::isEnemyRecentLocked(const rclcpp::Time & now) const
   const auto dt = now - last_enemy_time_;
   const auto timeout_ns = static_cast<int64_t>(detect_timeout_ms_) * 1000 * 1000;
 
-  return dt.nanoseconds() <= timeout_ns;
+  return dt.nanoseconds() >= 0 && dt.nanoseconds() <= timeout_ns;
 }
 
 bool IsAttackStateCondition::canLeaveAttackLocked(const rclcpp::Time & now) const
@@ -126,8 +127,9 @@ BT::NodeStatus IsAttackStateCondition::tick()
       return BT::NodeStatus::FAILURE;
     }
 
-    if (!attack_started_) {
+    if (!attack_started_ || attack_finished_) {
       attack_started_ = true;
+      attack_finished_ = false;
       attack_start_time_ = now;
     }
 
@@ -135,7 +137,11 @@ BT::NodeStatus IsAttackStateCondition::tick()
   }
 
   if (mode_ == "can_leave") {
-    return can_leave ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    if (can_leave) {
+      attack_finished_ = true;
+      return BT::NodeStatus::SUCCESS;
+    }
+    return BT::NodeStatus::FAILURE;
   }
 
   if (mode_ == "keep_attack") {
